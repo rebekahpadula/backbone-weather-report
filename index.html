@@ -8,17 +8,16 @@
 <body>
     <div id="weather-info"></div>
     <div id="main">
-        <!-- <h1>Forecast for <span id="city"></span></h1> -->
     </div>
     <script id="weather-info-template" type="text/template">
-        <h1>Forecast for <%= get("name") %></h1>
+        <h2>Forecast for <%= get("name") %></h2>
         <span> <%= get("country") %> </span>
         <span>Lat: <%= get("lat") %> </span>
         <span>Lon: <%= get("lon") %> </span>
     </script>
     <script id="weather-template" type="text/template">
         <ul>
-            <li>Day: <%= new Date(get("dt") * 1000).toDateString() %></li>
+            <li>Date: <%= new Date(get("dt") * 1000).toDateString() %></li>
             <li>Condition: <%= get("weather")[0].description %> </li>
             <li>Hi: <%= get("temp").max %> </li>
             <li>Lo: <%= get("temp").min %> </li>

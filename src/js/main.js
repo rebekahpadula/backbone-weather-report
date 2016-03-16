@@ -36,6 +36,7 @@
         }
         return output;
     }
+
     // Updates view with info
     function updateData (data) {
         collection.reset();
@@ -45,81 +46,120 @@
         city.set('lat', data.city.coord.lat);
         city.set('lon', data.city.coord.lon);
     }
+
     // Makes a request to openweathermap with apiKey for specified city, callback
     // function insures readyState
     function getWeatherForcast (cityId, callback) {
-        var url = 'http://api.openweathermap.org/data/2.5/forecast/daily?count=7&id=' + cityId;
-
-        url += '&appid=' + apiKey;
-
-        var request = new XMLHttpRequest();
-        // Callback function to be executed with the data
-        request.onreadystatechange = function () {
-            if (request.readyState === 4) {
-                callback(JSON.parse(request.responseText));
-            }
-        };
-
-        request.open('GET', url);
-
-        request.send();
+        $.ajax({
+            url: 'http://api.openweathermap.org/data/2.5/forecast/daily?count=7&id=' + cityId + '&appid=' + apiKey,
+            method: 'GET',
+            success: callback
+        });
     };
+
     // Creates default view with Moscow
     getWeatherForcast('524901', updateData);
 
-    // Creating templates
-    var weatherViewTemplate = _.template($('#weather-template').html());
-
-    var weatherInfoTemplate = _.template($('#weather-info-template').html());
-
     // Creating elements for templates and appending them
     function createInfoView (model) {
+        var weatherInfoTemplate = _.template($('#weather-info-template').html());
         var el = $('<div>');
-        var info = weatherInfoTemplate(model);
+      
+        function render () {
+            var contents = weatherInfoTemplate(model);
+            el.html(contents);
+        }
 
-        el.html(info);
+        model.on('change', render);
+
+        render();
 
         return {
-            el: el
+            el: el,
+            destroy: function () {
+                model.off('change', render);
+                el.remove();
+            }
+        };
+    }
+
+    function createListView (collection) {
+        var el = $('<div>');
+
+        function render () {
+            el.empty();
+
+            var children = collection.map(createWeatherView);
+            var childEls = children.map(function (x) {
+                return x.el;
+            });
+
+            el.append(childEls);
+        }
+
+        collection.on('add', render);
+
+        render();
+
+        return {
+            el: el,
+            destroy: function () {
+                collection.off('add', render);
+                el.remove();
+            }
         };
     }
 
     function createWeatherView (model) {
+        var weatherViewTemplate = _.template($('#weather-template').html());
         var el = $('<div>');
-        var contents = weatherViewTemplate(model);
 
-        el.html(contents);
+        function render () {
+            var contents = weatherViewTemplate(model);
+            el.html(contents);
+        }
+
+        model.on('change', render);
+
+        render();        
 
         return {
-            el: el
+            el: el,
+            destroy: function () {
+                model.off('change', render);
+                el.remove();
+            }
         };
     }
 
     // Function that the event listener is executing. Reseting collection and adding a new one.
     // mapping it to new views
-    function renderWeatherView (collection) {
-        $('#main').html('');
-        var children = collection.map(createWeatherView);
-        var childEls = children.map(function (x) {
-            return x.el;
-        });
+    // function renderWeatherView (collection) {
+    //     $('#main').html('');
+    //     var children = collection.map(createWeatherView);
+    //     var childEls = children.map(function (x) {
+    //         return x.el;
+    //     });
 
-        $('#main').append(childEls);
-    }
+    //     $('#main').append(childEls);
+    // }
+
+    var infoView = createInfoView(city);
+
+    $('#weather-info').append(infoView.el);
+
+    var listView = createListView(collection);
+
+    $('#main').append(listView.el);
+
     // rendering city name/country/lat/lon view
-    function renderWeatherInfoView (model) {
-        $('#weather-info').html('');
-        var childView = createInfoView(model);
-        $('#weather-info').append(childView.el);
-    }
-    // Begin event listeners
-    collection.on('add', function () {
-        renderWeatherView(collection);
-    });
+    // function renderWeatherInfoView (model) {
+    //     $('#weather-info').html('');
+    //     var childView = createInfoView(model);
+    //     $('#weather-info').append(childView.el);
+    // }
 
-    city.on('change', function () {
-        renderWeatherInfoView(city);
-    });
+    // Begin event listeners
 
     button.on('click', function () {
         getWeatherForcast(input.val(), updateData);
