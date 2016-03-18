@@ -353,4 +353,27 @@ td,
 th {
   padding: 0; }
 
+*, *:before, *:after {
+  box-sizing: border-box; }
+
+html {
+  background: #87cefa;
+  position: relative;
+  font-family: 'Lato', sans-serif;
+  font-size: 18px; }
+
+ul {
+  list-style-type: none; }
+
+.WeatherApp {
+  text-align: center; }
+
+.ForecastDay, .ForecastAverage {
+  text-align: left;
+  padding: 0; }
+
+@media screen and (min-width: 500px) {
+  ul {
+    float: left; } }
+
 /*# sourceMappingURL=main.css.map */

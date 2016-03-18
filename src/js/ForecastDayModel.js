@@ -1,0 +1,1 @@
+var ForecastDayModel = Backbone.Model.extend();

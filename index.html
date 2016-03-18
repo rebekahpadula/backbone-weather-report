@@ -3,32 +3,53 @@
 <head>
     <title>
     </title>
+    <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="build/main.css">
 </head>
 <body>
-    <div id="weather-info"></div>
-    <div id="main">
-    </div>
+    <div id="app"></div>
     <script id="weather-info-template" type="text/template">
-        <h2>Forecast for <%= get("name") %></h2>
-        <span> <%= get("country") %> </span>
-        <span>Lat: <%= get("lat") %> </span>
-        <span>Lon: <%= get("lon") %> </span>
+        <h2>Forecast for <%= name %></h2>
+        <span> <%= country %> </span>
+        <span>Lat: <%= lat %> </span>
+        <span>Lon: <%= lon %> </span>
+    </script>
+    <script id="weather-averages-template" type="text/template">
+        <ul>
+            <li>Averages</li>
+            <li><%= avgDescription %></li>
+            <li>Hi: <%= hi %></li>
+            <li>Lo: <%= lo %></li>
+            <li>Humidity: <%= avgHumidity %>%</li>
+            <li>Wind Speed: <%= avgSpeed %> mph</li>
+            <li>Wind Direction: <%= avgDirection %></li>
+        </ul>
     </script>
     <script id="weather-template" type="text/template">
         <ul>
-            <li>Date: <%= new Date(get("dt") * 1000).toDateString() %></li>
-            <li>Condition: <%= get("weather")[0].description %> </li>
-            <li>Hi: <%= get("temp").max %> </li>
-            <li>Lo: <%= get("temp").min %> </li>
-            <li>Humidity: <%= get("humidity") %> </li>
-            <li>Wind Speed: <%= get("speed") %> mph</li>
-            <li>Wind Direction: <%= get("deg") %></li>
-        </ul>
+            <li>Date: <%= new Date(dt * 1000).toDateString() %></li>
+            <li><%= weather[0].description %> </li>
+            <li>Hi: <%= dayHi %> &#8457 </li>
+            <li>Lo: <%= dayLo %> &#8457 </li>
+            <li>Humidity: <%= humidity %>%</li>
+            <li>Wind Speed: <%= speed %> mph</li>
+            <li>Wind Direction: <%= cardinal %> </li>
+        </ul>      
     </script>
-    <script src="node_modules/underscore/underscore.js"></script>
-    <script src="src/js/jquery.js"></script>
-    <script src="node_modules/backbone/backbone.js"></script>
-    <script src="src/js/main.js"></script>
+    <script type="text/javascript" src="node_modules/underscore/underscore.js"></script>
+    <script type="text/javascript" src="src/js/jquery.js"></script>
+    <script type="text/javascript" src="node_modules/backbone/backbone.js"></script>
+    <script type="text/javascript" src="src/js/cityModel.js"></script>
+    <script type="text/javascript" src="src/js/ForecastDayModel.js"></script>
+    <script type="text/javascript" src="src/js/forecastCollection.js"></script>
+    <script type="text/javascript" src="src/js/AppView.js"></script>
+    <script type="text/javascript" src="src/js/inputView.js"></script>
+    <script type="text/javascript" src="src/js/cardinalDirections.js"></script>
+    <script type="text/javascript" src="src/js/ForecastAverageView.js"></script>
+    <script type="text/javascript" src="src/js/ForecastDayView.js"></script>
+    <script type="text/javascript" src="src/js/ForecastView.js"></script>
+    <script type="text/javascript" src="src/js/cityView.js"></script>
+    <script type="text/javascript" src="src/js/toFahrenheit.js"></script>
+    <script type="text/javascript" src="src/js/main.js"></script>
 </body>
 </html>
